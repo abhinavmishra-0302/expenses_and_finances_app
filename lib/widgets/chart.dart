@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:expenses_and_finances/models/transaction.dart';
 import 'package:expenses_and_finances/widgets/chart_bar.dart';
 import 'package:flutter/material.dart';
