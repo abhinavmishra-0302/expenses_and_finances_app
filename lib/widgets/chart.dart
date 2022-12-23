@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Chart extends StatelessWidget {
-  final List<Transaction> _recentTransaction;
+  final List<Transactions> _recentTransaction;
 
   Chart(this._recentTransaction);
 

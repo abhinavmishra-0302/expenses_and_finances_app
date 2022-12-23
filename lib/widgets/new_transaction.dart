@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -15,6 +17,9 @@ class _NewTransactionState extends State<NewTransaction> {
   final amountController = TextEditingController();
   DateTime _txnDate = DateTime(1900);
 
+  DatabaseReference reference = FirebaseDatabase.instance.ref();
+  final user = FirebaseAuth.instance.currentUser;
+
   void _presentDatePicker() {
     showDatePicker(
         context: context,
@@ -28,6 +33,27 @@ class _NewTransactionState extends State<NewTransaction> {
             _txnDate = datePicked;
           });
     });
+  }
+
+  void _addTxn(){
+    if (!titleController.text.isEmpty &&
+        double.parse(amountController.text) > 0 && _txnDate != DateTime(1900)) {
+      final id = (_txnDate.millisecondsSinceEpoch-DateTime.now().millisecondsSinceEpoch).abs().toString();
+
+      widget._addNewTxn(id, titleController.text,
+          double.parse(amountController.text), _txnDate);
+
+        reference.child(user!.uid).child(id).set(
+          {
+            "txnName" : titleController.text,
+            "txnAmount" : amountController.text,
+            "txnDate" : DateFormat("MMM dd, yyyy").format(_txnDate),
+          }
+        );
+
+    }
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -73,13 +99,7 @@ class _NewTransactionState extends State<NewTransaction> {
           ),
           TextButton(
               onPressed: () {
-                if (!titleController.text.isEmpty &&
-                    double.parse(amountController.text) > 0 && _txnDate != DateTime(1900)) {
-                  widget._addNewTxn(titleController.text,
-                      double.parse(amountController.text), _txnDate);
-                }
-
-                Navigator.of(context).pop();
+                _addTxn();
               },
               child: Text("Add Transaction")),
         ],

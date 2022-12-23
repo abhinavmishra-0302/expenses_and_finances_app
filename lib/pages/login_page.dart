@@ -52,6 +52,7 @@ class _LoginPageState extends State<LoginPage> {
     auth.signInWithCredential(credential).whenComplete(() {
       Fluttertoast.showToast(msg: "Sign in successful");
       Navigator.push(context, MaterialPageRoute(builder: (context) {
+        Navigator.of(context).pop();
         return MyHomePage();
       }));
     });

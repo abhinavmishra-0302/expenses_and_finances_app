@@ -1,10 +1,14 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
-  final List<Transaction> _userTransactions;
+  final List<Transactions> _userTransactions;
 
   TransactionList(this._userTransactions);
 
@@ -45,10 +49,9 @@ class TransactionList extends StatelessWidget {
                             width: 2,
                           )),
                           child: Text(
-                            "₹ " +
-                                _userTransactions[index]
+                            "₹ ${_userTransactions[index]
                                     .valueOfTxn
-                                    .toStringAsFixed(1),
+                                    .toStringAsFixed(1)}",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
