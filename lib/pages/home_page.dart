@@ -1,3 +1,4 @@
+import 'package:expenses_and_finances/pages/login_page.dart';
 import 'package:expenses_and_finances/pages/make_plan.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -20,12 +21,14 @@ class _MyHomePageState extends State<MyHomePage> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
 
-  final user = FirebaseAuth.instance.currentUser;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  late final user;
   DatabaseReference reference = FirebaseDatabase.instance.ref();
 
   List<Transactions> _userTransactions = [];
 
   _MyHomePageState() {
+    user = auth.currentUser;
     reference.child(user!.uid).onValue.listen((event) {
       setState(() {
         _userTransactions = [];
@@ -60,8 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Transactions> get _recentTransaction {
     return _userTransactions.where((tx) {
       return tx.dateOfTxn.isAfter(
-        DateTime.now().subtract(Duration(days: 7)),
-      );
+        DateTime.now().subtract(Duration(days: 30)),
+      ) && tx.dateOfTxn.month == DateTime.now().month;
     }).toList();
   }
 
@@ -89,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: appBar,
         drawer: Drawer(
@@ -102,13 +105,51 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Text(user!.phoneNumber as String)])),
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                                margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                child: Container(
+                                  height: 60,
+                                  width: 60,
+                                  child: CircleAvatar(
+                                    backgroundImage:
+                                        AssetImage("assets/images/profile.jpg"),
+                                  ),
+                                )),
+                            Text(
+                              user!.phoneNumber!.substring(3) as String,
+                              style:
+                                  TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                            ),
+                            Container(
+                              height: 25,
+                              width: 25,
+                              child: Image.asset(
+                                "assets/images/arrow.png",
+                                fit: BoxFit.scaleDown,
+                              ),
+                            )
+                          ],
+                        )
+                      ])),
               ListTile(
-                title: Text("Make a plan"),
+                title: Text("Make a plan", style: TextStyle(fontWeight: FontWeight.bold),),
                 onTap: () {
                   Navigator.of(context).pop();
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return MakePlanPage();
+                  }));
+                },
+              ),
+              ListTile(
+                title: Text("Log out", style: TextStyle(fontWeight: FontWeight.bold)),
+                onTap: () {
+                  auth.signOut();
+                  Navigator.of(context).pop();
+                  Navigator.push(context, MaterialPageRoute(builder: (_) {
+                    return LoginPage();
                   }));
                 },
               )

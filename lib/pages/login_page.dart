@@ -51,8 +51,8 @@ class _LoginPageState extends State<LoginPage> {
 
     auth.signInWithCredential(credential).whenComplete(() {
       Fluttertoast.showToast(msg: "Sign in successful");
+      Navigator.of(context).pop();
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        Navigator.of(context).pop();
         return MyHomePage();
       }));
     });
@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
             child: codeSent
                 ? TextFormField(
                     autofocus: true,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.visiblePassword,
                     controller: codeController,
                     decoration: InputDecoration(
                         labelText: "Enter code sent",

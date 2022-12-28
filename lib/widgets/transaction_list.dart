@@ -55,6 +55,7 @@ class TransactionList extends StatelessWidget {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
+                              fontFamily: "Quicksand",
                               color: Theme.of(context).primaryColorDark,
                             ),
                           ),
@@ -67,6 +68,7 @@ class TransactionList extends StatelessWidget {
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
+                                  fontFamily: "Quicksand",
                                   color: Colors.black),
                             ),
                             Text(
@@ -75,6 +77,7 @@ class TransactionList extends StatelessWidget {
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
+                                  fontFamily: "Quicksand",
                                   color: Colors.black26),
                             ),
                           ],
